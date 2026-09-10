@@ -1,0 +1,36 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Aegis-T3N Confidential Enterprise Agent",
+  "description": "Enterprise-grade confidential compliance, verifiable credential validation, and private payroll computation agent running on Terminal 3 Network (T3N) confidential compute enclaves.",
+  "image": "https://raw.githubusercontent.com/RobZombAI/aegis-t3n/master/public/aegis-avatar.png",
+  "services": [
+    {
+      "name": "A2A",
+      "endpoint": "https://robzombai.github.io/aegis-t3n/.well-known/agent-card.json",
+      "version": "0.3.0"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://mcp.aegis-t3n.terminal3.io/v1",
+      "version": "2025-06-18"
+    },
+    {
+      "name": "DID",
+      "endpoint": "did:t3n:5c03ccacc11b775dded44a0e73d06690870c752b",
+      "version": "v1"
+    }
+  ],
+  "x402Support": false,
+  "active": true,
+  "registrations": [
+    {
+      "standard": "ERC-8004",
+      "scope": "enterprise:confidential-payroll-and-compliance"
+    }
+  ],
+  "supportedTrust": [
+    "tee-attestation",
+    "intel-sgx-dcap",
+    "t3n-trust-anchor"
+  ]
+}
