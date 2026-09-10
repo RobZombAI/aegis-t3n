@@ -7,6 +7,8 @@ export interface NetworkStats {
   latencyMs: number
   clusterVersion: string
   tpsEstimated: number
+  slotsInEpoch?: number
+  slotIndex?: number
 }
 
 export interface WalletState {
@@ -31,4 +33,10 @@ export interface TokenForgeConfig {
   initialSupply: number
   description: string
   iconUrl: string
+}
+
+export interface RecentBlock {
+  slot: number
+  timestamp: number
+  txCount: number
 }

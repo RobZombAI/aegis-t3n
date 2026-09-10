@@ -4,6 +4,9 @@ import { NetworkStats } from './components/NetworkStats'
 import { TransferCard } from './components/TransferCard'
 import { TokenForge } from './components/TokenForge'
 import { EcosystemRadar } from './components/EcosystemRadar'
+import { ValidatorDashboard } from './components/ValidatorDashboard'
+import { RpcPlayground } from './components/RpcPlayground'
+import { NetworkOverview } from './components/NetworkOverview'
 import { WalletModal } from './components/WalletModal'
 import { getNetworkTelemetry, getCookBalance } from './services/cookieChain'
 import type { WalletState, NetworkStats as NetworkStatsType } from './types'
@@ -17,13 +20,15 @@ import {
   ExternalLink,
   CheckCircle2,
   Terminal,
+  ShieldCheck,
+  Code2,
 } from 'lucide-react'
 
 export default function App() {
   const [stats, setStats] = useState<NetworkStatsType | null>(null)
   const [loadingStats, setLoadingStats] = useState(true)
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<'terminal' | 'tokenForge' | 'ecosystem'>('terminal')
+  const [activeTab, setActiveTab] = useState<'terminal' | 'validators' | 'tokenForge' | 'rpcConsole' | 'ecosystem'>('terminal')
 
   const [wallet, setWallet] = useState<WalletState>({
     connected: false,
@@ -50,7 +55,7 @@ export default function App() {
     }
 
     fetchStats()
-    const interval = setInterval(fetchStats, 3000)
+    const interval = setInterval(fetchStats, 2500)
     return () => {
       mounted = false
       clearInterval(interval)
@@ -161,7 +166,7 @@ export default function App() {
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold tracking-wide">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Cookie Chain SVM • Sub-second Execution Engine</span>
+              <span>Cookie Chain SVM • Sub-second Execution Engine (Agave v4.1.2)</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
               Il Terminale Definitivo per{' '}
@@ -170,8 +175,8 @@ export default function App() {
               </span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Esplora blocchi, invia transazioni istantanee, distribuisci token SPL e interagisci con
-              l'ecosistema memetico e ultra-economico di Cookie Chain in tempo reale.
+              Piattaforma professionale completa: monitoraggio RPC in tempo reale, set validatori on-chain,
+              trasferimenti istantanei su SVM, deployer di token e console per sviluppatori.
             </p>
           </div>
 
@@ -211,17 +216,18 @@ export default function App() {
               Telemetria Chain in Tempo Reale
             </h2>
             <span className="text-xs text-slate-500 font-mono flex items-center gap-1">
-              <RefreshCw className="w-3 h-3 animate-spin text-amber-400" /> Polling RPC attivo
+              <RefreshCw className="w-3 h-3 animate-spin text-amber-400" /> Polling RPC attivo (https://rpc.cookiescan.io)
             </span>
           </div>
           <NetworkStats stats={stats} loading={loadingStats} />
         </section>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 border-b border-slate-800 pb-1">
+        <div className="flex items-center space-x-2 border-b border-slate-800 pb-1 overflow-x-auto">
+          
           <button
             onClick={() => setActiveTab('terminal')}
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition ${
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'terminal'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -230,10 +236,22 @@ export default function App() {
             <Send className="w-4 h-4" />
             <span>Transazioni & Wallet</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('validators')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'validators'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>Validatori On-Chain</span>
+          </button>
           
           <button
             onClick={() => setActiveTab('tokenForge')}
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition ${
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'tokenForge'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
@@ -244,15 +262,27 @@ export default function App() {
           </button>
 
           <button
+            onClick={() => setActiveTab('rpcConsole')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'rpcConsole'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Code2 className="w-4 h-4" />
+            <span>Console RPC Live</span>
+          </button>
+
+          <button
             onClick={() => setActiveTab('ecosystem')}
-            className={`px-5 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition ${
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'ecosystem'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
                 : 'text-slate-400 hover:text-white hover:bg-slate-900'
             }`}
           >
             <Compass className="w-4 h-4" />
-            <span>Radar Ecosistema</span>
+            <span>Ecosistema & Tokenomics</span>
           </button>
         </div>
 
@@ -285,12 +315,12 @@ export default function App() {
                         <span className="text-sm font-bold text-amber-300">COOK</span>
                       </div>
                       <p className="text-[11px] text-slate-400 mt-1">
-                        Valuta nativa utilizzata per gas e trasferimenti
+                        Valuta nativa utilizzata per gas e trasferimenti su Cookie SVM
                       </p>
                     </div>
 
                     <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
-                      <span>Provider:</span>
+                      <span>Provider Attivo:</span>
                       <span className="font-semibold text-white uppercase text-[11px] px-2 py-0.5 rounded bg-slate-800">
                         {wallet.walletType}
                       </span>
@@ -317,9 +347,9 @@ export default function App() {
 
               <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
                 <span className="flex items-center gap-1 text-emerald-400">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> SVM Ready
+                  <CheckCircle2 className="w-3.5 h-3.5" /> SVM Live Node
                 </span>
-                <span className="font-mono">Chain ID: cookie-mainnet</span>
+                <span className="font-mono">Cluster: Agave 4.1.2</span>
               </div>
             </div>
 
@@ -331,15 +361,26 @@ export default function App() {
           </div>
         )}
 
-        {/* Tab 2: Token Forge */}
+        {/* Tab 2: Validators On-Chain */}
+        {activeTab === 'validators' && <ValidatorDashboard />}
+
+        {/* Tab 3: Token Forge */}
         {activeTab === 'tokenForge' && (
           <div className="max-w-3xl mx-auto">
             <TokenForge wallet={wallet} />
           </div>
         )}
 
-        {/* Tab 3: Ecosystem Radar */}
-        {activeTab === 'ecosystem' && <EcosystemRadar />}
+        {/* Tab 4: Interactive RPC Console */}
+        {activeTab === 'rpcConsole' && <RpcPlayground />}
+
+        {/* Tab 5: Ecosystem & Tokenomics */}
+        {activeTab === 'ecosystem' && (
+          <div className="space-y-8">
+            <NetworkOverview />
+            <EcosystemRadar />
+          </div>
+        )}
 
       </main>
 
@@ -349,7 +390,7 @@ export default function App() {
           <div className="flex items-center space-x-2">
             <Cookie className="w-4 h-4 text-amber-400" />
             <span className="text-slate-400 font-semibold">CookiePulse</span>
-            <span>— Costruito per il Bounty ufficiale su Superteam Earn</span>
+            <span>— Prodotto ufficiale per Cookie Chain SVM (Bounty Superteam Earn)</span>
           </div>
           <div className="flex items-center space-x-4">
             <a
