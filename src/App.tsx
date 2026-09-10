@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import { Navbar } from './components/Navbar'
 import { NetworkStats } from './components/NetworkStats'
 import { TransferCard } from './components/TransferCard'
+import { DEXSwap } from './components/DEXSwap'
+import { CookieGame } from './components/CookieGame'
+import { TipJar } from './components/TipJar'
 import { TokenForge } from './components/TokenForge'
 import { EcosystemRadar } from './components/EcosystemRadar'
 import { ValidatorDashboard } from './components/ValidatorDashboard'
@@ -22,13 +25,18 @@ import {
   Terminal,
   ShieldCheck,
   Code2,
+  ArrowDownUp,
+  HeartHandshake,
+  Gamepad2,
 } from 'lucide-react'
 
 export default function App() {
   const [stats, setStats] = useState<NetworkStatsType | null>(null)
   const [loadingStats, setLoadingStats] = useState(true)
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
-  const [activeTab, setActiveTab] = useState<'terminal' | 'validators' | 'tokenForge' | 'rpcConsole' | 'ecosystem'>('terminal')
+  
+  type TabType = 'terminal' | 'swap' | 'game' | 'tipjar' | 'validators' | 'tokenForge' | 'rpcConsole' | 'ecosystem'
+  const [activeTab, setActiveTab] = useState<TabType>('terminal')
 
   const [wallet, setWallet] = useState<WalletState>({
     connected: false,
@@ -166,17 +174,17 @@ export default function App() {
           <div className="max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold tracking-wide">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>Cookie Chain SVM • Sub-second Execution Engine (Agave v4.1.2)</span>
+              <span>CookieVerse OS • The Sovereign Cookie Chain Super-dApp</span>
             </div>
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
-              Il Terminale Definitivo per{' '}
+              L'Ecosistema Definitivo su{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-500">
                 Cookie Chain
               </span>
             </h1>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Piattaforma professionale completa: monitoraggio RPC in tempo reale, set validatori on-chain,
-              trasferimenti istantanei su SVM, deployer di token e console per sviluppatori.
+              La suite completa all-in-one: Terminale Transazioni, Cookieswap DEX, Gioco On-Chain, TipJar per creatori,
+              Bakery per Airdrop, set validatori live da Agave 4.1.2 e Console per sviluppatori.
             </p>
           </div>
 
@@ -192,9 +200,17 @@ export default function App() {
             ) : (
               <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-900 border border-emerald-500/40 text-emerald-300 text-xs font-mono">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Wallet Attivo: {wallet.publicKey?.slice(0, 6)}...{wallet.publicKey?.slice(-6)}</span>
+                <span>Wallet: {wallet.publicKey?.slice(0, 6)}...{wallet.publicKey?.slice(-6)} ({wallet.balanceCook.toFixed(2)} COOK)</span>
               </div>
             )}
+
+            <button
+              onClick={() => setActiveTab('game')}
+              className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2"
+            >
+              <Gamepad2 className="w-4 h-4" />
+              <span>Gioca a Cookie Clicker</span>
+            </button>
 
             <a
               href="https://hyperlane.cookiescan.io"
@@ -222,7 +238,7 @@ export default function App() {
           <NetworkStats stats={stats} loading={loadingStats} />
         </section>
 
-        {/* Navigation Tabs */}
+        {/* Navigation Tabs Bar */}
         <div className="flex items-center space-x-2 border-b border-slate-800 pb-1 overflow-x-auto">
           
           <button
@@ -234,7 +250,55 @@ export default function App() {
             }`}
           >
             <Send className="w-4 h-4" />
-            <span>Transazioni & Wallet</span>
+            <span>Terminale & Trasferimenti</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('swap')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'swap'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <ArrowDownUp className="w-4 h-4" />
+            <span>Cookieswap DEX</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('game')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'game'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Gamepad2 className="w-4 h-4" />
+            <span>Cookie Clicker & Fortune</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('tipjar')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'tipjar'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <HeartHandshake className="w-4 h-4" />
+            <span>TipJar & PayLink</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('tokenForge')}
+            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
+              activeTab === 'tokenForge'
+                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
+                : 'text-slate-400 hover:text-white hover:bg-slate-900'
+            }`}
+          >
+            <Coins className="w-4 h-4" />
+            <span>Bakery & Airdrop</span>
           </button>
 
           <button
@@ -246,19 +310,7 @@ export default function App() {
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
-            <span>Validatori On-Chain</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('tokenForge')}
-            className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
-              activeTab === 'tokenForge'
-                ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
-                : 'text-slate-400 hover:text-white hover:bg-slate-900'
-            }`}
-          >
-            <Coins className="w-4 h-4" />
-            <span>Cookie Token Forge</span>
+            <span>Validatori Live</span>
           </button>
 
           <button
@@ -270,7 +322,7 @@ export default function App() {
             }`}
           >
             <Code2 className="w-4 h-4" />
-            <span>Console RPC Live</span>
+            <span>Console RPC</span>
           </button>
 
           <button
@@ -282,15 +334,13 @@ export default function App() {
             }`}
           >
             <Compass className="w-4 h-4" />
-            <span>Ecosistema & Tokenomics</span>
+            <span>Ecosistema & Bridge</span>
           </button>
         </div>
 
         {/* Tab 1: Terminal & Transfer */}
         {activeTab === 'terminal' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            
-            {/* Wallet Overview Status */}
             <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 flex flex-col justify-between">
               <div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -353,28 +403,39 @@ export default function App() {
               </div>
             </div>
 
-            {/* Transfer Card */}
             <div className="lg:col-span-2">
               <TransferCard wallet={wallet} onTransferSuccess={handleTransferSuccess} />
             </div>
-
           </div>
         )}
 
-        {/* Tab 2: Validators On-Chain */}
-        {activeTab === 'validators' && <ValidatorDashboard />}
+        {/* Tab 2: DEX Swap */}
+        {activeTab === 'swap' && (
+          <div className="max-w-2xl mx-auto">
+            <DEXSwap wallet={wallet} />
+          </div>
+        )}
 
-        {/* Tab 3: Token Forge */}
+        {/* Tab 3: Cookie Game */}
+        {activeTab === 'game' && <CookieGame />}
+
+        {/* Tab 4: TipJar */}
+        {activeTab === 'tipjar' && <TipJar wallet={wallet} />}
+
+        {/* Tab 5: Token Forge & Bakery */}
         {activeTab === 'tokenForge' && (
           <div className="max-w-3xl mx-auto">
             <TokenForge wallet={wallet} />
           </div>
         )}
 
-        {/* Tab 4: Interactive RPC Console */}
+        {/* Tab 6: Validators On-Chain */}
+        {activeTab === 'validators' && <ValidatorDashboard />}
+
+        {/* Tab 7: Interactive RPC Console */}
         {activeTab === 'rpcConsole' && <RpcPlayground />}
 
-        {/* Tab 5: Ecosystem & Tokenomics */}
+        {/* Tab 8: Ecosystem & Tokenomics */}
         {activeTab === 'ecosystem' && (
           <div className="space-y-8">
             <NetworkOverview />
@@ -389,8 +450,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex items-center space-x-2">
             <Cookie className="w-4 h-4 text-amber-400" />
-            <span className="text-slate-400 font-semibold">CookiePulse</span>
-            <span>— Prodotto ufficiale per Cookie Chain SVM (Bounty Superteam Earn)</span>
+            <span className="text-slate-400 font-semibold">CookieVerse OS</span>
+            <span>— The Sovereign Cookie Chain Super-dApp (Bounty Superteam Earn)</span>
           </div>
           <div className="flex items-center space-x-4">
             <a
