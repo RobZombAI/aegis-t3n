@@ -18,13 +18,15 @@ While other competitors build fragmented, single-feature prototypes, **CookieVer
 
 | Feature Area | Module in CookieVerse OS | What It Does |
 | :--- | :--- | :--- |
-| **DeFi & Trading** | **Cookieswap DEX Terminal** | AMM swap interface with live price calculation, slippage controls (0.1%, 0.5%, 1.0%), and instant route execution between COOK, USDC, $CHIP, and $BAKE. |
-| **Gaming & Culture** | **Cookie Clicker & Degen Fortune** | Interactive on-chain idle clicker with upgradeable ovens (Grandma, Industrial SVM Oven, Agave Particle Accelerator) + Fortune Cookie cracker with Web3 prophecies. |
+| **DeFi & Trading** | **Cookieswap DEX & Price Chart** | AMM swap interface + dynamic SVG Price Chart with timeframe selectors (1H, 24H, 7D, 30D), TVL metrics, and route execution between COOK, USDC, $CHIP, and $BAKE. |
+| **Real-time Activity** | **Live Streaming Activity Feed** | Sub-second streaming transaction feed displaying recent swaps, mints, and transfers on Cookie Chain with direct explorer links. |
+| **Gaming & Culture** | **Cookie Clicker & Degen Fortune** | Interactive on-chain idle clicker with upgradeable ovens (Grandma, Industrial SVM Oven, Agave Particle Accelerator) + Fortune Cookie cracker with Web3 prophecies and crunchy sound FX. |
 | **Merchant & Payments** | **Cookie PayJar & TipLink** | Instant payment link and visual QR code generator for creators, streamers, and merchants on Cookie Chain with custom memo receipts. |
 | **Token Creation** | **Bakery & Bulk Airdrop** | Low-cost (<$0.05) SPL Token deployer with metadata configurator + CSV mass airdrop dispatcher in a single SVM block. |
 | **Consensus & Security** | **Live On-Chain Validators** | 100% real-time queries to `getVoteAccounts`: tracks active Agave v4.1.2 consensus nodes, >1.5B COOK active stake, commission rates, and voting slots. |
 | **Developer Playground** | **Interactive JSON-RPC Console** | In-app developer console allowing raw execution of JSON-RPC calls (`getSlot`, `getSupply`, `getClusterNodes`, `getHealth`) directly to `https://rpc.cookiescan.io`. |
-| **Tokenomics & Bridge** | **Network Overview & Radar** | Live circulating vs multi-sig vault supply metrics (`getSupply`), Genesis Hash verification (`9wDaBR...`), and direct integration with Hyperlane Bridge. |
+| **Navigation & Audio** | **Floating Dock & Sound Engine** | Smooth floating dock for quick tab jumps, back-to-top scroll, and procedural Web Audio API sound effects (crunch, clicks, chimes). |
+| **Zero-Gas Sandbox** | **Built-in Demo Wallet** | Pre-funded demo wallet with 45 COOK so judges and reviewers can test all features without requiring mainnet faucet tokens. |
 
 ---
 
