@@ -11,7 +11,11 @@ import { ValidatorDashboard } from './components/ValidatorDashboard'
 import { RpcPlayground } from './components/RpcPlayground'
 import { NetworkOverview } from './components/NetworkOverview'
 import { WalletModal } from './components/WalletModal'
+import { PriceChart } from './components/PriceChart'
+import { LiveActivityFeed } from './components/LiveActivityFeed'
+import { FloatingDock } from './components/FloatingDock'
 import { getNetworkTelemetry, getCookBalance } from './services/cookieChain'
+import { playCyberClick, playSuccessChime } from './services/soundFx'
 import type { WalletState, NetworkStats as NetworkStatsType } from './types'
 import {
   Cookie,
@@ -34,6 +38,7 @@ export default function App() {
   const [stats, setStats] = useState<NetworkStatsType | null>(null)
   const [loadingStats, setLoadingStats] = useState(true)
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
+  const [soundEnabled, setSoundEnabled] = useState(true)
   
   type TabType = 'terminal' | 'swap' | 'game' | 'tipjar' | 'validators' | 'tokenForge' | 'rpcConsole' | 'ecosystem'
   const [activeTab, setActiveTab] = useState<TabType>('terminal')
@@ -79,10 +84,16 @@ export default function App() {
     }
   }, [wallet.connected, wallet.publicKey, wallet.walletType])
 
+  const handleSelectTab = (tab: TabType) => {
+    if (soundEnabled) playCyberClick()
+    setActiveTab(tab)
+  }
+
   const handleConnectWallet = (type: 'nightly' | 'solana' | 'demo') => {
     setIsWalletModalOpen(false)
 
     if (type === 'demo') {
+      if (soundEnabled) playSuccessChime()
       setWallet({
         connected: true,
         publicKey: 'Cook1eDemonstrat1onWa11etAddressForJudges777',
@@ -99,6 +110,7 @@ export default function App() {
         nightly
           .connect()
           .then((res: any) => {
+            if (soundEnabled) playSuccessChime()
             const pubKey = res?.publicKey?.toString() || nightly.publicKey?.toString()
             setWallet({
               connected: true,
@@ -119,6 +131,7 @@ export default function App() {
         solana
           .connect()
           .then((res: any) => {
+            if (soundEnabled) playSuccessChime()
             const pubKey = res?.publicKey?.toString() || solana.publicKey?.toString()
             setWallet({
               connected: true,
@@ -205,7 +218,7 @@ export default function App() {
             )}
 
             <button
-              onClick={() => setActiveTab('game')}
+              onClick={() => handleSelectTab('game')}
               className="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-3 rounded-xl text-sm shadow-md transition flex items-center gap-2"
             >
               <Gamepad2 className="w-4 h-4" />
@@ -242,7 +255,7 @@ export default function App() {
         <div className="flex items-center space-x-2 border-b border-slate-800 pb-1 overflow-x-auto">
           
           <button
-            onClick={() => setActiveTab('terminal')}
+            onClick={() => handleSelectTab('terminal')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'terminal'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -254,7 +267,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('swap')}
+            onClick={() => handleSelectTab('swap')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'swap'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -266,7 +279,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('game')}
+            onClick={() => handleSelectTab('game')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'game'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -278,7 +291,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('tipjar')}
+            onClick={() => handleSelectTab('tipjar')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'tipjar'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -290,7 +303,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('tokenForge')}
+            onClick={() => handleSelectTab('tokenForge')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'tokenForge'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -302,7 +315,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('validators')}
+            onClick={() => handleSelectTab('validators')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'validators'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -314,7 +327,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('rpcConsole')}
+            onClick={() => handleSelectTab('rpcConsole')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'rpcConsole'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -326,7 +339,7 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setActiveTab('ecosystem')}
+            onClick={() => handleSelectTab('ecosystem')}
             className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold flex items-center gap-2 transition whitespace-nowrap ${
               activeTab === 'ecosystem'
                 ? 'bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
@@ -340,79 +353,92 @@ export default function App() {
 
         {/* Tab 1: Terminal & Transfer */}
         {activeTab === 'terminal' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 flex flex-col justify-between">
-              <div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                  Dettagli Wallet Connesso
-                </span>
-                
-                {wallet.connected && wallet.publicKey ? (
-                  <div className="mt-4 space-y-4">
-                    <div>
-                      <span className="text-xs text-slate-500">Indirizzo pubblico</span>
-                      <p className="text-xs font-mono text-white bg-slate-900 p-2.5 rounded-xl border border-slate-800 break-all mt-1">
-                        {wallet.publicKey}
-                      </p>
-                    </div>
-
-                    <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30">
-                      <span className="text-xs font-semibold text-amber-300">Saldo Disponibile</span>
-                      <div className="flex items-baseline space-x-2 mt-1">
-                        <span className="text-3xl font-black text-amber-400 font-mono">
-                          {wallet.balanceCook.toFixed(3)}
-                        </span>
-                        <span className="text-sm font-bold text-amber-300">COOK</span>
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="glass-panel rounded-3xl p-6 sm:p-8 border border-slate-800 flex flex-col justify-between">
+                <div>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    Dettagli Wallet Connesso
+                  </span>
+                  
+                  {wallet.connected && wallet.publicKey ? (
+                    <div className="mt-4 space-y-4">
+                      <div>
+                        <span className="text-xs text-slate-500">Indirizzo pubblico</span>
+                        <p className="text-xs font-mono text-white bg-slate-900 p-2.5 rounded-xl border border-slate-800 break-all mt-1">
+                          {wallet.publicKey}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-slate-400 mt-1">
-                        Valuta nativa utilizzata per gas e trasferimenti su Cookie SVM
-                      </p>
-                    </div>
 
-                    <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
-                      <span>Provider Attivo:</span>
-                      <span className="font-semibold text-white uppercase text-[11px] px-2 py-0.5 rounded bg-slate-800">
-                        {wallet.walletType}
-                      </span>
+                      <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+                        <span className="text-xs font-semibold text-amber-300">Saldo Disponibile</span>
+                        <div className="flex items-baseline space-x-2 mt-1">
+                          <span className="text-3xl font-black text-amber-400 font-mono">
+                            {wallet.balanceCook.toFixed(3)}
+                          </span>
+                          <span className="text-sm font-bold text-amber-300">COOK</span>
+                        </div>
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          Valuta nativa utilizzata per gas e trasferimenti su Cookie SVM
+                        </p>
+                      </div>
+
+                      <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
+                        <span>Provider Attivo:</span>
+                        <span className="font-semibold text-white uppercase text-[11px] px-2 py-0.5 rounded bg-slate-800">
+                          {wallet.walletType}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="mt-6 text-center py-8">
-                    <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
-                      <Cookie className="w-7 h-7" />
+                  ) : (
+                    <div className="mt-6 text-center py-8">
+                      <div className="w-14 h-14 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 mb-3">
+                        <Cookie className="w-7 h-7" />
+                      </div>
+                      <h4 className="text-base font-bold text-white">Nessun Wallet Connesso</h4>
+                      <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+                        Collega Nightly Wallet o usa il Demo Sandbox per testare le funzioni.
+                      </p>
+                      <button
+                        onClick={() => setIsWalletModalOpen(true)}
+                        className="mt-4 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold px-4 py-2 rounded-xl text-xs transition"
+                      >
+                        Seleziona Wallet
+                      </button>
                     </div>
-                    <h4 className="text-base font-bold text-white">Nessun Wallet Connesso</h4>
-                    <p className="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
-                      Collega Nightly Wallet o usa il Demo Sandbox per testare le funzioni.
-                    </p>
-                    <button
-                      onClick={() => setIsWalletModalOpen(true)}
-                      className="mt-4 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 font-bold px-4 py-2 rounded-xl text-xs transition"
-                    >
-                      Seleziona Wallet
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+                  <span className="flex items-center gap-1 text-emerald-400">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> SVM Live Node
+                  </span>
+                  <span className="font-mono">Cluster: Agave 4.1.2</span>
+                </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
-                <span className="flex items-center gap-1 text-emerald-400">
-                  <CheckCircle2 className="w-3.5 h-3.5" /> SVM Live Node
-                </span>
-                <span className="font-mono">Cluster: Agave 4.1.2</span>
+              <div className="lg:col-span-2">
+                <TransferCard wallet={wallet} onTransferSuccess={handleTransferSuccess} />
               </div>
             </div>
 
-            <div className="lg:col-span-2">
-              <TransferCard wallet={wallet} onTransferSuccess={handleTransferSuccess} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+              <PriceChart />
+              <LiveActivityFeed />
             </div>
           </div>
         )}
 
         {/* Tab 2: DEX Swap */}
         {activeTab === 'swap' && (
-          <div className="max-w-2xl mx-auto">
-            <DEXSwap wallet={wallet} />
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
+            <div className="xl:col-span-7 space-y-8">
+              <PriceChart />
+              <LiveActivityFeed />
+            </div>
+            <div className="xl:col-span-5">
+              <DEXSwap wallet={wallet} />
+            </div>
           </div>
         )}
 
@@ -442,6 +468,14 @@ export default function App() {
             <EcosystemRadar />
           </div>
         )}
+
+        {/* Floating Navigation Dock */}
+        <FloatingDock
+          activeTab={activeTab}
+          onSelectTab={(tab) => handleSelectTab(tab as TabType)}
+          soundEnabled={soundEnabled}
+          onToggleSound={() => setSoundEnabled((prev) => !prev)}
+        />
 
       </main>
 

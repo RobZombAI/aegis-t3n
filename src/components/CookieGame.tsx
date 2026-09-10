@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Trophy, Cookie as CookieIcon, Gift } from 'lucide-react'
+import { playCookieCrunch, playCyberClick, playSuccessChime } from '../services/soundFx'
 
 export const CookieGame: React.FC = () => {
   const [cookies, setCookies] = useState(100)
@@ -27,6 +28,7 @@ export const CookieGame: React.FC = () => {
 
   const handleClickCookie = () => {
     setIsBouncing(true)
+    playCookieCrunch()
     setCookies((prev) => prev + clickMultiplier)
     setTimeout(() => setIsBouncing(false), 150)
   }
@@ -36,6 +38,7 @@ export const CookieGame: React.FC = () => {
       alert('Non hai abbastanza biscotti per questo potenziamento!')
       return
     }
+    playCyberClick()
     setCookies((prev) => prev - cost)
     setCps((prev) => prev + addCps)
     if (addClick > 0) setClickMultiplier((prev) => prev + addClick)
@@ -46,6 +49,7 @@ export const CookieGame: React.FC = () => {
       alert('Servono almeno 50 biscotti per aprire un biscotto della fortuna!')
       return
     }
+    playSuccessChime()
     setCookies((prev) => prev - 50)
     const random = fortunes[Math.floor(Math.random() * fortunes.length)]
     setOpenedFortune(random)
