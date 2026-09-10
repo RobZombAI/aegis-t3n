@@ -1,22 +1,26 @@
 {
-  "name": "cookie-pulse",
+  "name": "aegis-t3n",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Enterprise-grade confidential compliance and payroll agent for Terminal 3 Network (T3N)",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "run:agent": "tsx src/cli/runAgent.ts"
   },
   "dependencies": {
     "@solana/web3.js": "^1.99.0",
     "@tailwindcss/vite": "^4.3.3",
+    "@terminal3/t3n-sdk": "^5.2.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.44.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwind-merge": "^3.6.0",
+    "tsx": "^4.23.13",
     "vite-plugin-node-polyfills": "^0.28.0"
   },
   "devDependencies": {

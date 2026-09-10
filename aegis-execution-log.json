@@ -1,0 +1,10 @@
+{
+  "executionId": "EX-64E40C6BE7F0",
+  "timestamp": "2026-09-10T22:26:49.774Z",
+  "totalGrossPayrollUsd": 68400,
+  "totalTaxWithheldUsd": 16278,
+  "totalNetDisbursementUsd": 52122,
+  "employeeCount": 5,
+  "enclaveAttestationHash": "0xe4906b8a799fb4c651f0200312cdc9039b2a0e31b1c65f337d738701a8816806",
+  "did": "did:t3n:f7063229f95e78f4961bbbda73d3d9f574dc9be2"
+}
